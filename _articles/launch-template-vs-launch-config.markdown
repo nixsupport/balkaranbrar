@@ -5,7 +5,7 @@ featured_img: launch-template-vs-launch-config.jpg
 description: "A new bucket is checked whether it is encrypted or not. If not, Lambda function is triggered which sets the default encryption"
 ---
 <br>
-<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Launch Template vs Launch Configuration</h2>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Launch Template<br>vs<br>Launch Configuration</h2>
 <br>
 <p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
 Launch Templates were introduced in 2017. At a high level, both Launch Templates and Launch Configuration are used to configure AMI, Instance Type, Key Pair, etc in order to launch new instances in Auto Scaling environment.

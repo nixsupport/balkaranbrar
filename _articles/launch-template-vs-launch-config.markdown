@@ -27,7 +27,7 @@ Once a basic launch template is created, you can take do any of the following:
     <li>Create Spot Fleet</li>
 </ul>
 <br>
-<img src="/img/articles/launch-template-1.jpg">
+<img src="/img/articles/launch-template-1.jpg" class="center">
 <br>
 </p>
 <p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">

@@ -18,7 +18,7 @@ You can also launch instances right from the Launch Templates. It allows you to 
 <br>
 Below animation demonstrates simple process of creating a launch template.
 <br>
-<img src="/gif/launch-template-1.gif">
+<img src="/gif/launch-template-1.gif" class="center">
 <br>
 Once a basic launch template is created, you can take do any of the following:
 <ul>
@@ -35,7 +35,7 @@ Out of three options, option 1 and 3 cannot be done using Launch Configuration. 
 <br>
 Option second allows you to launch fleet of spot instances with configuration steps as shown below:
 <br>
-<img src="/gif/launch-template-2.gif">
+<img src="/gif/launch-template-2.gif" class="center">
 <br>
 Hope it helps in understanding the key differences between Launch Templates and Launch Configuration.
 </p>

@@ -5,7 +5,7 @@ featured_img: develop-laravel-apps-using-docker.jpg
 description: "Setup local development environment using Docker to build Laravel apps and deploy later."
 ---
 <br>
-<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Run Laravel Apps using Docker</h2>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Develop Laravel Apps using Docker</h2>
 <br>
 <p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
 As more and more applications are getting deployed to containers, it is very helpful to start developing apps on containers itself. This practice makes sure that you capture every dependency to deploy and run your application in different environments.

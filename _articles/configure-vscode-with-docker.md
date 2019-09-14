@@ -116,4 +116,5 @@ You can create new python files in VSCode and run in the terminal and the actual
 <br>
 I will publish some more articles where I explain how to use boto3, pyspark, numpy, etc using this approach.
 <br>
+<br>
 <i>Hope this article will help someone. Thanks for reading.</i>

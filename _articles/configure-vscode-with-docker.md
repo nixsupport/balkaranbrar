@@ -24,7 +24,7 @@ However, how about using docker for some python programs which cannot be exposed
 First of all launch VSCode and search for <b>Remote Containers</b> extension and install that.
 <br>
 <br>
-<img src="/img/articles/remote-containers.JPG" class="center" width=80 height=300>
+<img src="/img/articles/remote-containers.JPG" class="center">
 <br>
 </p>
 <p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">

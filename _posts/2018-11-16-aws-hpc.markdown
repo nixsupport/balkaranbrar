@@ -4,7 +4,7 @@ subtitle: Cloud Architect
 layout: default
 modal-id: 3
 date: 2018-11-16
-img: aws-hpc.PNG
+img: aws-hpc.png
 thumbnail: aws-hpc-thumbnail.png
 alt: AWS HPC Design
 project-date: November 2018

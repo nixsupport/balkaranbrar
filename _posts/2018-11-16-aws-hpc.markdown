@@ -1,12 +1,12 @@
 ---
-title: AWS High Performance Computing
+title: AWS HPC Design
 subtitle: Cloud Architect
 layout: default
 modal-id: 3
 date: 2018-11-16
 img: aws-hpc.PNG
 thumbnail: aws-hpc-thumbnail.png
-alt: AWS High Performance Computing
+alt: AWS HPC Design
 project-date: November 2018
 client: none
 services: CloudFormation, AutoScaling, EC2, CfnCluster

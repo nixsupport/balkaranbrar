@@ -3,11 +3,11 @@ title: Infrastructure Pipeline
 subtitle: DevOps
 layout: default
 modal-id: 3
-date: 2018-11-16
+date: 2019-02-16
 img: infra-pipeline.jpg
 thumbnail: infra-pipeline-thumbnail.jpg
 alt: Infrastructure Pipeline
-project-date: November 2018
+project-date: February 2019
 client: iAdvisory
 services: CloudFormation, CodeBuild, CodePipeline, CodeCommit, S3
 category: DevOps

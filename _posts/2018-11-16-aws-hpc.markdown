@@ -2,7 +2,7 @@
 title: AWS HPC Design
 subtitle: Cloud Architect
 layout: default
-modal-id: 3
+modal-id: 1
 date: 2018-11-16
 img: aws-hpc.png
 thumbnail: aws-hpc-thumbnail.png

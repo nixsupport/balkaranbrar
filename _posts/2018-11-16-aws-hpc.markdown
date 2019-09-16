@@ -1,0 +1,16 @@
+---
+title: AWS High Performance Computing
+subtitle: Cloud Architect
+layout: default
+modal-id: 3
+date: 2018-11-16
+img: aws-hpc.PNG
+thumbnail: aws-hpc-thumbnail.png
+alt: AWS High Performance Computing
+project-date: November 2018
+client: none
+services: CloudFormation, AutoScaling, EC2, CfnCluster
+category: Cloud Architect
+description: This implementation process high workload on cluster on EC2 instances and managed using CfnCluster
+
+---

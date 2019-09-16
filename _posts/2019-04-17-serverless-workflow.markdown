@@ -1,12 +1,12 @@
 ---
-title: ETL Workflow
+title: Serverless ETL Workflow
 subtitle: Big Data
 layout: default
 modal-id: 2
 date: 2019-04-17
 img: serverless-workflow.png
 thumbnail: serverless-workflow-thumbnail.png
-alt: ETL Workflow
+alt: Serverless ETL Workflow
 project-date: April 2019
 client: None
 category: Big Data

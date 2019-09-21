@@ -1,5 +1,5 @@
 ---
-title: Serverless Disaster Recovery - II
+title: Disaster Recovery - II
 subtitle: Cloud Architect
 layout: default
 modal-id: 9

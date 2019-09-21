@@ -2,7 +2,7 @@
 title: CloudFormation Drift Remediation
 subtitle: Cloud Architect
 layout: default
-modal-id: 9
+modal-id: 10
 date: 2019-01-10
 img: cloudformation-remediation.png
 thumbnail: cloudformation-remediation-template.png

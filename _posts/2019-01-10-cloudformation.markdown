@@ -1,5 +1,5 @@
 ---
-title: CloudFormation Drift Remediation
+title: CFN Drift Remediation
 subtitle: Cloud Architect
 layout: default
 modal-id: 10

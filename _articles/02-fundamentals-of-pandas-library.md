@@ -37,7 +37,7 @@ Now let's go through some of the common functions we can use with our data frame
 <hr>
 <p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
 <b>df.dtypes and df.describe()</b>
-<img src="/img/articles/fundamentals-of-pandas-inner-5.PNG" class="center">
+<img src="/img/articles/fundamentals-of-pandas-inner-5.png" class="center">
 <img src="/img/articles/fundamentals-of-pandas-inner-6.PNG" class="center">
 <img src="/img/articles/fundamentals-of-pandas-inner-7.PNG" class="center">
 </p>

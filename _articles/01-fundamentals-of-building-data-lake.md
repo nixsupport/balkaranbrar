@@ -42,7 +42,7 @@ This is the first block of the data lake. Date ingestion process dumps the data 
 <br>
 <b>Staging Data or Silver Zone</b>
 <br>
-This block represents transformed data, means you've gone one step ahead and transformed the raw data based on your schema definition. This process is very helpful if you're building your training data sets because it essentialy clease the data so that your training model runs against meaningful data and not entire data set.
+This block represents transformed data, means you've gone one step ahead and transformed the raw data based on your schema definition. This process is very helpful if you're building your training data sets because it essentially cleanse the data so that your training model runs against meaningful data and not entire data set.
 <br>
 <b>Processed Data or Gold Zone</b>
 <br>

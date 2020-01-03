@@ -1,0 +1,74 @@
+I"ý4<p><br /></p>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Run PySpark and Jupyter Notebook using Docker</h2>
+<p><br /></p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+In this article, I'll explain about basic toolset required to write standard Data Analysis programs in the containerized environment using Docker. As always, my approach is to make your programs portable and platform independent.
+<br />
+Let's first understand briefly what I mean by toolset and what I'm going to package in the Docker container.
+<br />
+<ul style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif">
+<li><b>PySpark</b> - PySpark programming is the collaboration of Apache Spark and Python. It is a Python API built to interact with Apache Spark. Since it's written in Python you can use other Python modules to be an efficient Data Analyst</li>
+<li><b>Apache Spark</b> - It is a very popular framework for handling and working with Big Data. It is almost 100x faster than any other traditional large scale data processing frameworks</li> 
+<li><b>Jupyter Notebook</b> - It is an open source web application mostly used by Data Analysts / Engineers to write code, mathematical equations, data visualization, etc </li>
+<li><b>NumPy</b> - It is a Python library used to work with multi-dimensionsal arrays, matrices, high-level mathematical functions, etc</li>
+</ul>
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+Now let's dig into technical details and see how to setup local environment which supports PySpark, Jupyter Notebook and NumPy. Here are step-by-step instructions:
+<ol style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif">
+<li>Create a new folder on your system, e.g. c:\code\pyspark-jupyter or whatever name you want to give</li>
+<li>Create a file in that folder and call it <b>docker-compose.yaml</b> with the content given below:</li>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">version: </span><span class="s2">"3"</span>
+<span class="ss">services:
+  pyspark:
+    image: </span><span class="s2">"jupyter/all-spark-notebook"</span>
+    <span class="ss">volumes:
+      </span><span class="o">-</span> <span class="n">c</span><span class="ss">:/</span><span class="n">code</span><span class="o">/</span><span class="n">pyspark</span><span class="o">-</span><span class="n">data</span><span class="ss">:/</span><span class="n">home</span><span class="o">/</span><span class="n">jovyan</span>
+    <span class="ss">ports:
+      </span><span class="o">-</span> <span class="mi">8888</span><span class="p">:</span><span class="mi">8888</span></code></pre></figure>
+
+<li>In the above file, I'm pulling an official jupyter docker image, mapping the local folder with a folder inside container and exposing container port 8888 to host port 8888. Simple, isn't it?</li>
+<li>Now run this file using command <b>docker-compose up</b> and you'll see the output similar as shown below</li>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">PS</span> <span class="no">C</span><span class="p">:\</span><span class="n">code</span><span class="p">\</span><span class="n">pyspark</span><span class="o">-</span><span class="n">jupyter</span><span class="o">&gt;</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+<span class="no">Recreating</span> <span class="n">pyspark</span><span class="o">-</span><span class="n">jupyter_pyspark_1</span> <span class="o">...</span> <span class="n">done</span>
+<span class="no">Attaching</span> <span class="n">to</span> <span class="n">pyspark</span><span class="o">-</span><span class="n">jupyter_pyspark_1</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="no">Executing</span> <span class="n">the</span> <span class="ss">command: </span><span class="n">jupyter</span> <span class="n">notebook</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">40.780</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">Writing</span> <span class="n">notebook</span> <span class="n">server</span> <span class="n">cookie</span> <span class="n">secret</span> <span class="n">to</span> <span class="sr">/home/</span><span class="n">jovyan</span><span class="o">/</span><span class="p">.</span><span class="nf">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">jupyter</span><span class="o">/</span><span class="n">runtime</span><span class="o">/</span><span class="n">notebook_cookie_secret</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.010</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">Loading</span> <span class="no">IPython</span> <span class="n">parallel</span> <span class="n">extension</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.049</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">JupyterLab</span> <span class="n">extension</span> <span class="n">loaded</span> <span class="n">from</span> <span class="sr">/opt/</span><span class="n">conda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">jupyterlab</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.049</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">JupyterLab</span> <span class="n">application</span> <span class="n">directory</span> <span class="n">is</span> <span class="sr">/opt/</span><span class="n">conda</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">jupyter</span><span class="o">/</span><span class="n">lab</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.054</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">Serving</span> <span class="n">notebooks</span> <span class="n">from</span> <span class="n">local</span> <span class="ss">directory: </span><span class="sr">/home/</span><span class="n">jovyan</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.054</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">The</span> <span class="no">Jupyter</span> <span class="no">Notebook</span> <span class="n">is</span> <span class="n">running</span> <span class="ss">at:
+</span><span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.054</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="mi">3</span><span class="n">d475598a523</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="p">?</span><span class="n">token</span><span class="o">=</span><span class="no">YOUR_TOKEN</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.054</span> <span class="no">NotebookApp</span><span class="p">]</span>  <span class="n">or</span> <span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="p">?</span><span class="n">token</span><span class="o">=</span><span class="no">YOUR_TOKEN</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">I</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.055</span> <span class="no">NotebookApp</span><span class="p">]</span> <span class="no">Use</span> <span class="no">Control</span><span class="o">-</span><span class="no">C</span> <span class="n">to</span> <span class="n">stop</span> <span class="n">this</span> <span class="n">server</span> <span class="n">and</span> <span class="n">shut</span> <span class="n">down</span> <span class="n">all</span> <span class="n">kernels</span> <span class="p">(</span><span class="n">twice</span> <span class="n">to</span> <span class="n">skip</span> <span class="n">confirmation</span><span class="p">).</span>
+<span class="nf">pyspark_1</span>  <span class="o">|</span> <span class="p">[</span><span class="no">C</span> <span class="mi">14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">41.073</span> <span class="no">NotebookApp</span><span class="p">]</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span>     <span class="no">To</span> <span class="n">access</span> <span class="n">the</span> <span class="n">notebook</span><span class="p">,</span> <span class="nb">open</span> <span class="n">this</span> <span class="n">file</span> <span class="k">in</span> <span class="n">a</span> <span class="ss">browser:
+</span><span class="n">pyspark_1</span>  <span class="o">|</span>         <span class="n">file</span><span class="ss">:/</span><span class="o">/</span><span class="sr">/home/</span><span class="n">jovyan</span><span class="o">/</span><span class="p">.</span><span class="nf">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">jupyter</span><span class="o">/</span><span class="n">runtime</span><span class="o">/</span><span class="n">nbserver</span><span class="o">-</span><span class="mi">6</span><span class="o">-</span><span class="nb">open</span><span class="p">.</span><span class="nf">html</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span>     <span class="no">Or</span> <span class="n">copy</span> <span class="n">and</span> <span class="n">paste</span> <span class="n">one</span> <span class="n">of</span> <span class="n">these</span> <span class="no">URLs</span><span class="p">:</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span>         <span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="mi">3</span><span class="n">d475598a523</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="p">?</span><span class="n">token</span><span class="o">=</span><span class="no">YOUR_TOKEN</span>
+<span class="n">pyspark_1</span>  <span class="o">|</span>      <span class="n">or</span> <span class="n">http</span><span class="p">:</span><span class="sr">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="p">?</span><span class="n">token</span><span class="o">=</span><span class="no">YOUR_TOKEN</span></code></pre></figure>
+
+<li>Copy the URL <b>http://127.0.0.1:8888/?token=YOUR_TOKEN</b> and open in the browser of your choice</li>
+<li>You'll see an instance of Jupyter Notebook running in a container. As you might have noticed that your local folder is mapped inside the container</li>
+<img src="/img/articles/pyspark-jupyter-inner-1.PNG" class="center" />
+<hr />
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+Now let's create our first notebook and work with PySpark. This is just a brief introduction as I'll be writing separte articles about PySpark and NumPy in detail.
+<br />
+<b>PySpark Demo using Docker</b>
+<img src="/img/articles/pyspark-jupyter-inner-2.PNG" class="center" />
+<hr />
+The second notebook briefs about using NumPy.
+<br />
+<b>NumPy Demo using Docker</b>
+<img src="/img/articles/numpy-jupyter-inner-1.PNG" class="center" />
+<br />
+Hope it helps in starting your Data Analysis journey and using Docker to make portable programs.
+<br />
+<b><i>Happy Learning!</i></b>
+</p></ol></p>
+:ET

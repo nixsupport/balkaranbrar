@@ -1,0 +1,29 @@
+I"š<p><br /></p>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Configure LetsEncrypt with Kubernetes</h2>
+<p><br /></p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+As more and more solutions are built using microservices architecture, it is very important to have all your public endpoints encrypted. The good news is that you can achieve it without spending any additional penny. LetsEncrypt is one such project which is a free and open Certificate Authority and you can easily integrate it with your setup to automatically generate SSL certificates free of cost, FOREVER...
+<br />
+In this article I'll explain how you can setup LetsEncrypt with cert-manager on Kubernetes. I've used Route53 for this demonstration and <a href="https://cert-manager.io/docs/">cert-manager</a> version 0.12. This process is applicable for any flavor of Kubernetes be it bare-metal, EKS, GKE or AKS. Let's dig in.
+<br />
+<br />
+Please ensure you have following setup properly configured before working on LetsEncrypt setup.
+<ul style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:40px;font-size:15px">
+<li>Kubernetes Cluster</li>
+<li><a href="https://helm.sh/docs/intro/install/">Helm</a> package manager installed</li>
+</ul>
+<br />
+</p>
+<hr />
+
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+Now follow the step by step instructions to configure letsencrypt and cert-manager on Kubernetes.
+<br />
+1. Install the <i>CustomResourceDefinition</i> resources. These are those resources which are not available by default but can be created by extending the Kubernetes API. <br />
+'''kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml'''
+<br />
+2. 
+
+
+</p>
+:ET

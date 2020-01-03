@@ -4,6 +4,6 @@ services:
     image: "jekyll/jekyll"
     command: bash -c 'jekyll serve --force_polling'
     volumes:
-      - c:/code/agency:/srv/jekyll
+      - c:/code/balkaranbrar:/srv/jekyll
     ports:
       - 4000:4000

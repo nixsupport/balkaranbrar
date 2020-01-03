@@ -1,0 +1,176 @@
+I"¥N<p><br /></p>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center">Getting Started with AWS CDK</h2>
+<p><br /></p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
+AWS CDK became Generall Available (GA) in July 2019 with support of TypeScript and Python to begin with. It is an open source development framework. With AWS CDK, you can generate CloudFormation templates and provision infrastructure. As of this writing, AWS CDK supports Python and TypeScript in GA and .NET and Java in Developer Preview mode.
+<br />
+Before AWS CDK, I used Troposphere which is a Python library to create CloudFormation templates. I found that very helpful to generate CloudFormation templates in JSON format in particular.
+<br />
+This is the first article of series of articles based on AWS CDK. Let's first understand what is AWS CDK, how does it work and how you can get started with it.
+</p>
+<hr />
+
+<h4>What is AWS CDK?</h4>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
+AWS CDK is an open source software development framework. Everything in AWS CDK is a construct. To understand better, you can think construct as a cloud component which can also be called as a resource to understand it in the terminology of CloudFormation templates.
+<br />
+For Example, S3 bucket resource is a construct, DynamoDB resource is a construct and so on. You can use constructs to define relationships and set their properties.
+<br />
+Let's dig into it and create your first CloudFormation template using AWS CDK. I'm going to keep it simple and create an S3 bucket template for better understanding.
+</p>
+<p><br /></p>
+<h4>Create S3 bucket template using AWS CDK</h4>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
+In order to start working with AWS CDK, you need to setup your environment. Well, I'm not going to install anything on my local machine, instead I will configure the environment using Docker. Please checkout my <a href="https://balkaranbrar.ca/articles/configure-vscode-with-docker/">article</a> if you want to know more about configuring Docker with VSCode for Python.
+<br />
+<ul>
+<li>
+<h5 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:black">
+AWS CDK Folder Struture</h5>
+</li>
+</ul>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+At the bare minimum, you need to setup your AWS CDK app with three files as listed below:
+<ul style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:70px">
+  <li>app.py - A standard file to define your AWS CDK constructs</li>
+  <li>cdk.json - A standard file to map your app with python executable</li>
+  <li>requirements.txt - Optional but I recommend keeping this file. It contains all the requirements your app needs to generate template. You can install these requirements using pip.</li>
+</ul>
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+Here is how each of this file looks like.
+<br />
+<b>app.py</b>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">aws_cdk</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">aws_s3</span> <span class="k">as</span> <span class="n">s3</span><span class="p">,</span>
+    <span class="n">aws_iam</span> <span class="k">as</span> <span class="n">iam</span><span class="p">,</span>
+    <span class="n">core</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">S3Template</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Stack</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="n">core</span><span class="o">.</span><span class="n">App</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="c1">#create an S3 bucket
+</span>        <span class="n">myBucket</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Bucket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">'MyFirstBucket'</span><span class="p">,</span> <span class="n">bucket_name</span><span class="o">=</span><span class="s">'balkaran-aws-cdk-s3-demo-bucket'</span><span class="p">)</span>
+        <span class="n">myBucket</span><span class="o">.</span><span class="n">add_to_resource_policy</span><span class="p">(</span>    <span class="c1">#Grant read access to everyone in your account
+</span>            <span class="n">iam</span><span class="o">.</span><span class="n">PolicyStatement</span><span class="p">(</span>
+                    <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="s">'s3:GetObject'</span><span class="p">],</span>
+                    <span class="n">resources</span><span class="o">=</span><span class="p">[</span><span class="n">myBucket</span><span class="o">.</span><span class="n">arn_for_objects</span><span class="p">(</span><span class="s">'*'</span><span class="p">)],</span>
+                    <span class="n">principals</span><span class="o">=</span><span class="p">[</span><span class="n">iam</span><span class="o">.</span><span class="n">AccountPrincipal</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">Aws</span><span class="o">.</span><span class="n">ACCOUNT_ID</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">myUser</span> <span class="o">=</span> <span class="n">iam</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">'s3User'</span><span class="p">)</span>    <span class="c1">#Grant write access to a specific user
+</span>        <span class="n">myBucket</span><span class="o">.</span><span class="n">grant_write</span><span class="p">(</span><span class="n">myUser</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+<span class="n">S3Template</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="s">"S3Template"</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s">'region'</span><span class="p">:</span><span class="s">'us-east-1'</span><span class="p">})</span>
+<span class="n">app</span><span class="o">.</span><span class="n">synth</span><span class="p">()</span></code></pre></figure>
+
+</p>
+<br />
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+<b>cdk.json</b>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span>
+    <span class="s2">"app"</span><span class="p">:</span> <span class="s2">"python3 app.py"</span>
+<span class="p">}</span></code></pre></figure>
+
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+<b>requirements.txt</b>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">aws</span><span class="o">-</span><span class="n">cdk</span><span class="p">.</span><span class="nf">aws</span><span class="o">-</span><span class="n">s3</span>
+<span class="n">aws</span><span class="o">-</span><span class="n">cdk</span><span class="p">.</span><span class="nf">aws</span><span class="o">-</span><span class="n">iam</span></code></pre></figure>
+
+</p>
+<hr />
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+Now we have our code ready. In addition to these three files, let's create a new folder called <b>.divcontainer</b> at the root of our app. Let's configure that setup so that we run our code in the container instead of installing everything on local system.
+<ul>
+<li>
+<h5 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:black">
+Configure VSCode with Docker</h5>
+</li>
+</ul>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+We need create two files in <b>.divcontainer</b> folder, viz. <i>dockercontainer.json</i> and <i>Dockerfile</i>. Let's setup both.
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+<b>divcontainer.json</b>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span>
+	<span class="s2">"name"</span><span class="p">:</span> <span class="s2">"AWS CDK"</span><span class="p">,</span>
+	<span class="s2">"dockerFile"</span><span class="p">:</span> <span class="s2">"Dockerfile"</span><span class="p">,</span>
+
+	<span class="s2">"settings"</span><span class="p">:</span> <span class="p">{</span> 
+		<span class="s2">"terminal.integrated.shell.linux"</span><span class="p">:</span> <span class="s2">"/bin/bash"</span><span class="p">,</span>
+		<span class="s2">"python.pythonPath"</span><span class="p">:</span> <span class="s2">"/usr/bin/python3"</span>
+	<span class="p">},</span>
+
+	<span class="s2">"extensions"</span><span class="p">:</span> <span class="p">[</span>
+		<span class="s2">"ms-python.python"</span>
+	<span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:50px">
+<b>Dockerfile</b>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">FROM</span> <span class="n">amazonlinux</span><span class="p">:</span><span class="mi">2</span>
+<span class="no">WORKDIR</span> <span class="sr">/app
+ENV NODE_VERSION 8.16.0
+RUN yum -y --security update \
+  &amp;&amp; yum install -y \
+    git \
+    rsync \
+    zip \
+    unzip \
+    tar \
+    xz \
+    python3 \
+    python3-dev \
+    py3-setuptools \
+  &amp;&amp; yum clean all \
+  &amp;&amp; rm -rf /</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">yum</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">fsSLO</span> <span class="o">--</span><span class="n">compressed</span> <span class="s2">"https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz"</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">curl</span> <span class="o">-</span><span class="n">fsSLO</span> <span class="o">--</span><span class="n">compressed</span> <span class="s2">"https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt"</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">grep</span> <span class="s2">" node-v$NODE_VERSION-linux-x64.tar.xz</span><span class="se">\$</span><span class="s2">"</span> <span class="no">SHASUMS256</span><span class="p">.</span><span class="nf">txt</span> <span class="o">|</span> <span class="n">sha256sum</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">tar</span> <span class="o">-</span><span class="n">xJf</span> <span class="s2">"node-v$NODE_VERSION-linux-x64.tar.xz"</span> <span class="o">-</span><span class="no">C</span> <span class="sr">/usr/</span><span class="n">local</span> <span class="o">--</span><span class="n">strip</span><span class="o">-</span><span class="n">components</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">same</span><span class="o">-</span><span class="n">owner</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="sr">/usr/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">node</span> <span class="sr">/usr/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">nodejs</span> <span class="p">\</span>
+  <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="s2">"node-v$NODE_VERSION-linux-x64.tar.xz"</span> <span class="no">SHASUMS256</span><span class="p">.</span><span class="nf">txt</span>
+<span class="no">RUN</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">awscli</span>
+<span class="no">RUN</span> <span class="n">npm</span> <span class="n">install</span> <span class="o">-</span><span class="n">g</span> <span class="n">aws</span><span class="o">-</span><span class="n">cdk</span>
+<span class="no">RUN</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">aws</span><span class="o">-</span><span class="n">cdk</span><span class="p">.</span><span class="nf">core</span>
+<span class="no">ENTRYPOINT</span> <span class="p">[</span><span class="s2">"/bin/bash"</span><span class="p">]</span></code></pre></figure>
+
+</p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
+Once you have this setup completed, press F1 in VSCode and select <b>Remote-Containers: Open Folder in Container</b> option. You can also reopen VSCode and it will detect automatically that this projects need to run in the container. Below screenshot explains the entire process.
+<img src="/img/articles/aws-cdk-inner-1.jpg" class="center" />
+Once dependencies are installed, it's time to generate the template and deploy in AWS. Below is the list of commands you need to execute to complete deployment.
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">bash-4.2# cdk synth  //To generate the template. If your code contains error that will be reported here.</code></pre></figure>
+
+<img src="/img/articles/aws-cdk-inner-2.JPG" class="center" />
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px">
+The command <i>cdk deploy</i> creates a CloudFormation change-set and deploys the template. Below is some more detailed output generated by <i>cdk deploy</i>command
+<img src="/img/articles/aws-cdk-inner-3.JPG" class="center" />
+Finally, here is the list of commonly used AWS CDK commands:
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">cdk</span> <span class="n">ls</span>                          <span class="no">Lists</span> <span class="n">all</span> <span class="n">stacks</span> <span class="k">in</span> <span class="n">the</span> <span class="n">app</span>
+<span class="n">cdk</span> <span class="n">synth</span>                       <span class="no">Synthesizes</span> <span class="n">and</span> <span class="n">prints</span> <span class="n">the</span> <span class="no">CloudFormation</span> <span class="n">template</span> <span class="k">for</span> <span class="n">this</span> <span class="n">stack</span>
+<span class="n">cdk</span> <span class="n">bootstrap</span> <span class="p">[</span><span class="no">ENVIRONMENTS</span><span class="o">..</span><span class="p">]</span>  <span class="no">Deploys</span> <span class="n">the</span> <span class="no">CDK</span> <span class="n">toolkit</span> <span class="n">stack</span> <span class="n">into</span> <span class="n">an</span> <span class="no">AWS</span> <span class="n">environment</span>
+<span class="n">cdk</span> <span class="n">deploy</span>                      <span class="no">Deploys</span> <span class="n">the</span> <span class="n">stack</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">into</span> <span class="n">your</span> <span class="no">AWS</span> <span class="n">account</span>
+<span class="n">cdk</span> <span class="n">destroy</span>                     <span class="no">Destroy</span> <span class="n">the</span> <span class="n">stack</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">cdk</span> <span class="n">diff</span> <span class="p">[</span><span class="no">STACKS</span><span class="o">..</span><span class="p">]</span>             <span class="no">Compares</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">stack</span> <span class="n">with</span> <span class="n">the</span> <span class="n">deployed</span>
+                                <span class="n">stack</span> <span class="n">or</span> <span class="n">a</span> <span class="n">local</span> <span class="n">template</span> <span class="n">file</span><span class="p">,</span> <span class="n">and</span> <span class="n">returns</span>
+                                <span class="n">with</span> <span class="n">status</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">any</span> <span class="n">difference</span> <span class="n">is</span> <span class="n">found</span>
+<span class="n">cdk</span> <span class="n">metadata</span> <span class="p">[</span><span class="no">STACK</span><span class="p">]</span>            <span class="no">Returns</span> <span class="n">all</span> <span class="n">metadata</span> <span class="n">associated</span> <span class="n">with</span> <span class="n">this</span>
+                                <span class="n">stack</span>
+<span class="n">cdk</span> <span class="n">init</span> <span class="p">[</span><span class="no">TEMPLATE</span><span class="p">]</span>             <span class="no">Create</span> <span class="n">a</span> <span class="n">new</span><span class="p">,</span> <span class="n">empty</span> <span class="no">CDK</span> <span class="n">project</span> <span class="n">from</span> <span class="n">a</span>
+                                <span class="n">template</span><span class="o">.</span> <span class="no">Invoked</span> <span class="n">without</span> <span class="no">TEMPLATE</span><span class="p">,</span> <span class="n">the</span> <span class="n">app</span>
+                                <span class="n">template</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span><span class="p">.</span>
+<span class="nf">cdk</span> <span class="n">context</span>                     <span class="no">Manage</span> <span class="n">cached</span> <span class="n">context</span> <span class="n">values</span>
+<span class="n">cdk</span> <span class="n">docs</span>                        <span class="no">Opens</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">documentation</span> <span class="k">in</span> <span class="n">a</span> <span class="n">browser</span>
+<span class="n">cdk</span> <span class="n">doctor</span>                      <span class="no">Check</span> <span class="n">your</span> <span class="n">set</span><span class="o">-</span><span class="n">up</span> <span class="k">for</span> <span class="n">potential</span> <span class="n">problems</span></code></pre></figure>
+</p></p></p></p>
+:ET

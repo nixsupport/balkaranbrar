@@ -1,0 +1,149 @@
+I"å=<p><br /></p>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Configure LetsEncrypt with Kubernetes</h2>
+<p><br /></p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+As more and more solutions are built using microservices architecture, it is very important to have all your public endpoints encrypted. The good news is that you can achieve it without spending any additional penny. LetsEncrypt is one such project which is a free and open Certificate Authority and you can easily integrate it with your setup to automatically generate SSL certificates free of cost, FOREVER...
+<br />
+In this article I'll explain how you can setup LetsEncrypt with cert-manager on Kubernetes. I've used Route53 for this demonstration and <a href="https://cert-manager.io/docs/">cert-manager</a> version 0.12. This process is applicable for any flavor of Kubernetes be it bare-metal, EKS, GKE or AKS. Let's dig in.
+<br />
+<br />
+Please ensure you have following setup properly configured before working on LetsEncrypt setup.
+<ul style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:40px;font-size:15px">
+<li>Kubernetes Cluster</li>
+<li><a href="https://helm.sh/docs/intro/install/">Helm</a> package manager installed</li>
+</ul>
+</p>
+<hr />
+
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+Now follow the step by step instructions to configure letsencrypt and cert-manager on Kubernetes.
+<br />
+<ol style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:40px;font-size:15px">
+<li>Install the <i>CustomResourceDefinition</i> resources. These are those resources which are not available by default but can be created by extending the Kubernetes API.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">kubectl</span> <span class="n">apply</span> <span class="o">--</span><span class="n">validate</span><span class="o">=</span><span class="kp">false</span> <span class="o">-</span><span class="n">f</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">raw</span><span class="p">.</span><span class="nf">githubusercontent</span><span class="p">.</span><span class="nf">com</span><span class="o">/</span><span class="n">jetstack</span><span class="o">/</span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="o">/</span><span class="n">release</span><span class="o">-</span><span class="mf">0.12</span><span class="o">/</span><span class="n">deploy</span><span class="o">/</span><span class="n">manifests</span><span class="o">/</span><span class="mo">00</span><span class="o">-</span><span class="n">crds</span><span class="p">.</span><span class="nf">yaml</span></code></pre></figure>
+
+</li>
+<li>Create namespace for cert-manager.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">kubectl</span> <span class="n">create</span> <span class="n">ns</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span></code></pre></figure>
+
+</li>
+<li>Add the Jetstack Helm repository and update your local Helm chart repo cache.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">helm</span> <span class="n">repo</span> <span class="n">add</span> <span class="n">jetstack</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">charts</span><span class="p">.</span><span class="nf">jetstack</span><span class="p">.</span><span class="nf">io</span>
+<span class="err">$</span> <span class="n">helm</span> <span class="n">repo</span> <span class="n">update</span></code></pre></figure>
+
+</li>
+<li>Install the cert-manager Helm chart
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">helm</span> <span class="n">install</span> <span class="o">--</span><span class="nb">name</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span> <span class="o">--</span><span class="n">namespace</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span> <span class="o">--</span><span class="n">version</span> <span class="n">v0</span><span class="o">.</span><span class="mf">12.0</span> <span class="n">jetstack</span><span class="p">\</span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span></code></pre></figure>
+
+</li>
+<li>
+Now verify that cert-manager pods are created and wait for all them to be in running state.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">kubectl</span> <span class="n">get</span> <span class="n">pods</span> <span class="o">-</span><span class="n">n</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span>
+<span class="no">NAME</span>                                       <span class="no">READY</span>   <span class="no">STATUS</span>    <span class="no">RESTARTS</span>   <span class="no">AGE</span>
+<span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="o">-</span><span class="mi">6</span><span class="n">bcc9d894d</span><span class="o">-</span><span class="n">d7s9j</span>              <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="no">Running</span>   <span class="mi">0</span>          <span class="mi">23</span><span class="n">h</span>
+<span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="o">-</span><span class="n">cainjector</span><span class="o">-</span><span class="mi">594</span><span class="n">fd9cc45</span><span class="o">-</span><span class="n">w2mhf</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="no">Running</span>   <span class="mi">0</span>          <span class="mi">23</span><span class="n">h</span>
+<span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="o">-</span><span class="n">webhook</span><span class="o">-</span><span class="mi">785</span><span class="n">ff8fc78</span><span class="o">-</span><span class="n">gjd88</span>      <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="no">Running</span>   <span class="mi">0</span>          <span class="mi">23</span><span class="n">h</span></code></pre></figure>
+
+</li>
+<li>
+Create an IAM user and attach following policy to get access to Route53 zones. If your entire setup is on AWS then you can use IAM role as well. But if you're using Kubernetes cluster outside AWS but using only Route53 then you can use IAM user.
+Attach the following policy to the user and keep a note of AWS ACCESS KEY and SECRET ACCESS KEY.
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"route53:GetChange"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"route53:ListResourceRecordSets"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:route53:::hostedzone/*"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"arn:aws:route53:::change/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ListHostedZonesByName"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+</li>
+<li>
+Create a secret in cert-manager namespace which contains the SECRET ACCESS KEY. Save the secret key in the file called secretkey.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">kubectl</span> <span class="n">create</span> <span class="n">secret</span> <span class="n">generic</span> <span class="n">acme</span><span class="o">-</span><span class="n">route53</span> <span class="o">--</span><span class="n">from</span><span class="o">-</span><span class="n">file</span><span class="o">=</span><span class="n">secret</span><span class="o">-</span><span class="n">access</span><span class="o">-</span><span class="n">key</span><span class="o">=</span><span class="p">.</span><span class="nf">/</span><span class="n">secretkey</span> <span class="o">-</span><span class="n">n</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span></code></pre></figure>
+
+It will create a secret called acme-route53 in the cert-manager namespace. Make sure you delete the file <i>secretkey</i>
+</li>
+<li>
+Create a resource of type <i>ClusterIssuer</i> which will be used to issue certificates. Let's create it in the cert-manager namespace for better management. Although the namespace doesn't matter because ClusterIssuer resource is applicable to all the namespaces in the cluster.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">apiVersion: </span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="p">.</span><span class="nf">io</span><span class="o">/</span><span class="n">v1alpha2</span>
+<span class="ss">kind: </span><span class="no">ClusterIssuer</span>
+<span class="ss">metadata:
+  name: </span><span class="n">letsencrypt</span><span class="o">-</span><span class="n">prod</span>
+  <span class="ss">namespace: </span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span>
+<span class="ss">spec:
+  acme:
+    server: </span><span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">acme</span><span class="o">-</span><span class="n">v02</span><span class="p">.</span><span class="nf">api</span><span class="p">.</span><span class="nf">letsencrypt</span><span class="p">.</span><span class="nf">org</span><span class="o">/</span><span class="n">directory</span>
+    <span class="ss">email: </span><span class="no">YOUR</span> <span class="no">EMAIL</span> <span class="no">ID</span>
+    <span class="ss">privateKeySecretRef:
+      name: </span><span class="n">letsencrypt</span><span class="o">-</span><span class="n">prod</span>
+    <span class="ss">solvers:
+    </span><span class="o">-</span> <span class="ss">selector:
+        dnsZones:
+          </span><span class="o">-</span> <span class="s2">"YOUR DOMAIN"</span>
+      <span class="ss">dns01:
+        route53:
+          region: </span><span class="no">YOUR</span> <span class="no">REGION</span>
+          <span class="ss">accessKeyID: </span><span class="no">YOUR</span> <span class="no">ACCESS</span> <span class="no">KEY</span>
+          <span class="ss">secretAccessKeySecretRef:
+            name: </span><span class="n">acme</span><span class="o">-</span><span class="n">route53</span>
+            <span class="ss">key: </span><span class="n">secret</span><span class="o">-</span><span class="n">access</span><span class="o">-</span><span class="n">key</span></code></pre></figure>
+
+</li>
+<li>Now take a look at status of this resource.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">kubectl</span> <span class="n">get</span> <span class="n">clusterissuer</span> <span class="o">-</span><span class="n">n</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span>
+<span class="no">NAME</span>               <span class="no">READY</span>   <span class="no">AGE</span>
+<span class="n">letsencrypt</span><span class="o">-</span><span class="n">prod</span>   <span class="no">True</span>    <span class="mi">23</span></code></pre></figure>
+
+Above output confirms that it is ready for use. If the status shows 'False' here then check the logs of 'cert-manager-6bcc9d894d-d7s9j' pod to troubleshoot. 
+</li>
+<li> Once we have our issuer setup, let's create a new certificate. It will take around 2-3 minutes as it first verifies the domain name by create a recordset. 
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">apiVersion: </span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="p">.</span><span class="nf">io</span><span class="o">/</span><span class="n">v1alpha2</span>
+<span class="ss">kind: </span><span class="no">Certificate</span>
+<span class="ss">metadata:
+  name: </span><span class="n">nginx</span><span class="o">-</span><span class="n">tls</span>
+  <span class="ss">namespace: </span><span class="no">YOUR</span> <span class="no">NAMESPACE</span>
+<span class="ss">spec:
+  secretName: </span><span class="n">nginx</span><span class="o">-</span><span class="n">tls</span>
+  <span class="ss">issuerRef:
+    name: </span><span class="n">letsencrypt</span><span class="o">-</span><span class="n">prod</span>
+    <span class="ss">kind: </span><span class="no">ClusterIssuer</span>
+  <span class="ss">dnsNames:
+    </span><span class="o">-</span> <span class="s1">'*.YOUR.DOMAIN'</span>
+  <span class="ss">acme:
+    config:
+      </span><span class="o">-</span> <span class="ss">dns01:
+          provider: </span><span class="n">route53</span>
+        <span class="ss">domains:
+          </span><span class="o">-</span> <span class="s1">'*.YOUR.DOMAIN'</span></code></pre></figure>
+
+Above manifest will create a certificate by name 'nginx-tls' in the namespace you specify. Please do modify the DNS name as you provided while creating the ClusterIssuer.
+</li>
+</ol></p>
+:ET

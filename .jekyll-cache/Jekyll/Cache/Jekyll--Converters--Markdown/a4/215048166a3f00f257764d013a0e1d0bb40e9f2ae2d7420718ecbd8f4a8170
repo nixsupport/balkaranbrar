@@ -1,0 +1,36 @@
+I"à<p><br /></p>
+<h2 style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fed136;text-align:center"> Configure LetsEncrypt with Kubernetes</h2>
+<p><br /></p>
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+As more and more solutions are built using microservices architecture, it is very important to have all your public endpoints encrypted. The good news is that you can achieve it without spending any additional penny. LetsEncrypt is one such project which is a free and open Certificate Authority and you can easily integrate it with your setup to automatically generate SSL certificates free of cost, FOREVER...
+<br />
+In this article I'll explain how you can setup LetsEncrypt with cert-manager on Kubernetes. I've used Route53 for this demonstration and <a href="https://cert-manager.io/docs/">cert-manager</a> version 0.12. This process is applicable for any flavor of Kubernetes be it bare-metal, EKS, GKE or AKS. Let's dig in.
+<br />
+<br />
+Please ensure you have following setup properly configured before working on LetsEncrypt setup.
+<ul style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:40px;font-size:15px">
+<li>Kubernetes Cluster</li>
+<li><a href="https://helm.sh/docs/intro/install/">Helm</a> package manager installed</li>
+</ul>
+<br />
+</p>
+<hr />
+
+<p style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:15px;font-size:15px">
+Now follow the step by step instructions to configure letsencrypt and cert-manager on Kubernetes.
+<br />
+<ol style="font-family:Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif;padding-left:40px;font-size:15px">
+<li>Install the <i>CustomResourceDefinition</i> resources. These are those resources which are not available by default but can be created by extending the Kubernetes API.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">kubectl</span> <span class="n">apply</span> <span class="o">--</span><span class="n">validate</span><span class="o">=</span><span class="kp">false</span> <span class="o">-</span><span class="n">f</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">raw</span><span class="p">.</span><span class="nf">githubusercontent</span><span class="p">.</span><span class="nf">com</span><span class="o">/</span><span class="n">jetstack</span><span class="o">/</span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span><span class="o">/</span><span class="n">release</span><span class="o">-</span><span class="mf">0.12</span><span class="o">/</span><span class="n">deploy</span><span class="o">/</span><span class="n">manifests</span><span class="o">/</span><span class="mo">00</span><span class="o">-</span><span class="n">crds</span><span class="p">.</span><span class="nf">yaml</span></code></pre></figure>
+
+</li>
+<li>Create namespace for cert-manager.
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">kubectl</span> <span class="n">create</span> <span class="n">ns</span> <span class="n">cert</span><span class="o">-</span><span class="n">manager</span></code></pre></figure>
+
+</li>
+
+
+</ol></p>
+:ET
